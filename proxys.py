@@ -28,7 +28,7 @@ def check_ip(proxy):
         time.sleep(5)
         if response.status_code == 200:
             print(proxy, '----Pass!')
-            proxys_pool.write("%s\n" %str(proxy))
+            f.write("%s\n" %str(proxy))
         else:
             print(proxy, '----Fail!')
     except Exception as e:
@@ -37,21 +37,18 @@ def check_ip(proxy):
 
 if __name__ == "__main__":
     proxys = get_ip()
-    print(proxys)
-    proxys_pool = open(".\proxys_pool.txt", "w")
-    '''单线程版本
-    for i in range(len(proxys)):
-        check_ip(proxys[i])
-    '''
-    lock = threading.Lock()
-    threads = []
-    try:
+    with open("proxys_pool.txt", "w") as f:
+        '''单线程版本
         for i in range(len(proxys)):
-            thread = threading.Thread(target=check_ip, args=[proxys[i]])
-            threads.append(thread)
-            thread.start()
-        for thread in threads:
-            thread.join()
-    except Exception as e:
-        print(e)
-    proxys_pool.close()
+            check_ip(proxys[i])
+        '''
+        threads = []
+        try:
+            for i in range(len(proxys)):
+                thread = threading.Thread(target=check_ip, args=[proxys[i]])
+                threads.append(thread)
+                thread.start()
+            for thread in threads:
+                thread.join()
+        except Exception as e:
+            print(e)
