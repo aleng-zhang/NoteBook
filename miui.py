@@ -79,7 +79,8 @@ def main():
     m = re.findall('<meta name="description" content="(.*?)"', thtml)
     print(m[0])
 
-    ptext=gethtml('http://www.tuling123.com/openapi/api?key=0344bd2d86f33bda5654b941f757137a&info='+urllib.parse.quote(m[0]))
+    # tuling123.com 注册, 申请 api_key
+    ptext=gethtml('http://www.tuling123.com/openapi/api?key=[api_key]&info='+urllib.parse.quote(m[0]))
     ptext=json.loads(ptext)['text'] + '\n    --Powered by tuling robot'
     print('\\__' + ptext + '\n')
 
