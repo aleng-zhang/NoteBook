@@ -18,8 +18,8 @@ def get_ip():
     proxys = []
     for i in range(1,len(ips)):
         ip_info = ips[i].find_all('td')
-        proxys.append({ip_info[5].text: ip_info[1].text + ":" + ip_info[2].text})
-    return proxys
+        proxies.append({ip_info[5].text: ip_info[1].text + ":" + ip_info[2].text})
+    return proxies
 
 def check_ip(proxy):
     url = "http://www.baidu.com"
@@ -27,25 +27,25 @@ def check_ip(proxy):
         response = requests.get(url, headers=headers, proxies=proxy, timeout=5)
         time.sleep(5)
         if response.status_code == 200:
-            print(proxy, '----Pass!')
+            #print(proxy, '----Pass!')
             f.write("%s\n" %str(proxy))
         else:
-            print(proxy, '----Fail!')
+            #print(proxy, '----Fail!')
     except Exception as e:
         print(proxy, e)
         time.sleep(5)
 
 if __name__ == "__main__":
-    proxys = get_ip()
-    with open("proxys_pool.txt", "w") as f:
+    proxies = get_ip()
+    with open("proxies_pool.txt", "w") as f:
         '''单线程版本
-        for i in range(len(proxys)):
-            check_ip(proxys[i])
+        for i in range(len(proxies)):
+            check_ip(proxies[i])
         '''
         threads = []
         try:
-            for i in range(len(proxys)):
-                thread = threading.Thread(target=check_ip, args=[proxys[i]])
+            for i in range(len(proxies)):
+                thread = threading.Thread(target=check_ip, args=[proxies[i]])
                 threads.append(thread)
                 thread.start()
             for thread in threads:
